@@ -1,4 +1,6 @@
 const passport = require('passport');
+const JWTstrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const UserService = require('../services/user.service');
 
@@ -19,6 +21,28 @@ passport.use('signin', new LocalStrategy({
         done(error)
     }
 }))
+
+
+
+passport.use(
+  new JWTstrategy({
+      secretOrKey:'SweetGistSecretKey',
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+    },
+    async (payload, done) => {
+      try {
+        const user = await UserServices.findById(payload._id);
+        if(user){
+             return done(null, user);
+        }else{
+            done(null, { message: 'Authentication Error'})
+        }
+      } catch (error) {
+        done(error);
+      }
+    }
+  )
+);
 
 
 module.exports = passport;
