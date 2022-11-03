@@ -1,13 +1,28 @@
 const express = require('express');
+require('./src/services/passport.service')
 const app = express();
 const PORT = process.env.PORT || 4567
 const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
 const blogRouter = require('./src/routes/blog.route');
 const userRouter = require('./src/routes/user.route');
+const authRouter = require('./src/routes/auth.route');
 require('dotenv').config();
 
+
 app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie : {
+        maxAge: 24 * 60 * 60 //24 hrs
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.get('/', (req, res, next) => {
@@ -19,7 +34,7 @@ app.get('/', (req, res, next) => {
    
 })
 
-
+app.use('/auth', authRouter)
 app.use('/users', userRouter);
 app.use('/blogs', blogRouter)
 
@@ -27,11 +42,11 @@ app.use('/blogs', blogRouter)
  * 
  * This is to capture error from any of the route
  */
-app.use((err, req, res) => {
-    res.json({
-        error: err
-    })
-})
+// app.use((err, req, res) => {
+//     res.send({
+//         error: err
+//     })
+// })
 
 
  mongoose.connect( process.env.MONGO_URI ,{useNewUrlParser : true})
