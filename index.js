@@ -42,11 +42,12 @@ app.use('/blogs', blogRouter)
  * 
  * This is to capture error from any of the route
  */
-// app.use((err, req, res) => {
-//     res.send({
-//         error: err
-//     })
-// })
+app.use((error, req, res, next) => {
+    res.json({
+        error: error.message
+    })
+    next();
+})
 
 
  mongoose.connect( process.env.MONGO_URI ,{useNewUrlParser : true})
@@ -56,6 +57,7 @@ app.use('/blogs', blogRouter)
     console.log("An error occurred while connecting to MongoDB")
 })
  
+
 
 
 app.listen(PORT, () => {

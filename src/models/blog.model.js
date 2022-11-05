@@ -9,13 +9,13 @@ const BlogSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+      default: ''
     },
     tags: {
       type: [String],
     },
     author: {
-      type: mongoose.model.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -26,6 +26,7 @@ const BlogSchema = new mongoose.Schema(
     },
     read_count: {
       type: Number,
+      default: 0,
       required: true,
     },
     reading_time: {
@@ -34,6 +35,7 @@ const BlogSchema = new mongoose.Schema(
     },
     body: {
       type: String,
+      default: '',
       required: true,
     },
   },
@@ -41,5 +43,17 @@ const BlogSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+BlogSchema.pre("save", async function (next) {
+  try {
+    const words = await this.body.split(' ').length;
+    const reading_time = Math.round(words/60);
+    this.reading_time = reading_time < 1 ? 0 : reading_time;  
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
