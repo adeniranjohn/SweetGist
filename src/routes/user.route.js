@@ -26,17 +26,55 @@ user.get('/:user_id', async (req, res, next) => {
 });
 
 
-user.get('/:user_id/blogs?state=state', async (req, res, next) => {
+user.get('/:user_id/blogs', async (req, res, next) => {
     try{
         const { user_id } = req.params;
-        const { state } = req.query.state;
-       // const blogs = await BlogService.getBlogs({ user_id, state});
-        res.json(state);
+        const { state } = req.query;
+       const blogs = await BlogService.getUserBlogs({ user_id, state});
+        res.json(blogs);
 
     }catch(error){
         next(error)
     }
 })
+
+user.get('/:user_id/blogs/:blog_id', async (req, res, next) => {
+    try{
+        const { blog_id } = req.params;
+        const { _id } = req.user;
+        const blog = await BlogService.getUserBlog({user_id: _id, blog_id});
+        res.json(blog)
+
+    }catch(error){
+        next(error)
+    }
+})
+
+user.patch('/:user_id/blogs/:blog_id', async (req, res, next) => {
+    try{
+        const { blog_id } = req.params;
+        const { _id } = req.user;
+        const blog = await BlogService.updateBlog({_id, blog_id});
+        res.json(blog)
+
+    }catch(error){
+        next(error)
+    }
+})
+
+
+user.delete('/:user_id/blogs/:blog_id', async (req, res, next) => {
+    try{
+        const { blog_id } = req.params;
+        const blog = await BlogService.getUserBlog({blog_id});
+        res.json(blog)
+
+    }catch(error){
+        next(error)
+    }
+})
+
+
 
 
 

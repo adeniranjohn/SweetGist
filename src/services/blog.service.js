@@ -1,12 +1,34 @@
+const Blog = require('../models/blog.model');
+
+
 class BlogService {
 
-    async getAllBlogs(){
+    async getAllPublishedBlogs(){
+        const blogs = await Blog.find({state: 'published'});
+        return blogs; 
+    }
 
+    async getUserBlogs({user_id, state}){
+
+        const blogs = await Blog.find({author: user_id, state: state});
+        return blogs; 
+    } 
+
+    async getUserBlog({user_id, blog_id}){
+        const blog = await Blog.find({author: user_id, blog_id: blog_id});
+        return blog;
     }
 
 
     async getABlog(blog_id){
+        const blog = await Blog.find({blog_id: blog_id});
+        return blog;
+    }
 
+    async updatedBlog(blog_id){
+        const data = req.body;
+        const blog = await Blog.updateOne({...data}).where({blog_id: blog_id, author: user_id});
+        res.json(blogs)
     }
 
     async publishBlog(blog_id){
@@ -43,3 +65,5 @@ class BlogService {
 
     
 }
+
+module.exports = new BlogService;
