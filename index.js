@@ -18,7 +18,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie : {
-        maxAge: 60 * 60 //24 hrs
+        maxAge: 60 * 60 //1 hour
     }
 }));
 app.use(passport.initialize());
@@ -34,16 +34,17 @@ app.get('/', (req, res, next) => {
    
 })
 
-app.use('/auth', authRouter)
+app.use('/auth', authRouter);
 app.use('/users',passport.authenticate('jwt', { session: false }), userRouter);
-app.use('/blogs', blogRouter)
+app.use('/blogs', blogRouter);
 
 /**
  * 
  * This is to capture error from any of the route
  */
 app.use((error, req, res, next) => {
-    res.json({
+
+    res.status(500).json({
         error: error.message
     })
     next();

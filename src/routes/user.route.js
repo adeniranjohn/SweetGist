@@ -11,7 +11,6 @@ user.get('/', async (req, res) => {
     }catch(error){
         next(error)
     }
-    res.send('This is the default user route')
 })
 
 user.get('/:user_id', async (req, res, next) => {
@@ -56,7 +55,6 @@ user.patch('/:user_id/blogs/:blog_id', async (req, res, next) => {
         const { _id } = req.user;
         const blog = await BlogService.updateBlog({_id, blog_id});
         res.json(blog)
-
     }catch(error){
         next(error)
     }
@@ -68,15 +66,10 @@ user.delete('/:user_id/blogs/:blog_id', async (req, res, next) => {
         const { blog_id } = req.params;
         const blog = await BlogService.getUserBlog({blog_id});
         res.json(blog)
-
     }catch(error){
         next(error)
     }
 })
-
-
-
-
 
 
 module.exports = user;
