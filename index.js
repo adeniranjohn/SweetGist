@@ -8,7 +8,11 @@ const session = require('express-session');
 const blogRouter = require('./src/routes/blog.route');
 const userRouter = require('./src/routes/user.route');
 const authRouter = require('./src/routes/auth.route');
-require('dotenv').config();
+
+if(process.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
+
 
 
 app.use(express.json());
