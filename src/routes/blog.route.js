@@ -7,7 +7,7 @@ blog.get('/', async (req, res, next) => {
         const page = parseInt( req.params.page || 0)
         const limit = parseInt ( req.params.limit || 0)
         const blogs = await BlogService.getPublishedBlogs(page, limit);
-        res.json(blogs);
+        res.json({success: true, blogs: blogs});
     }catch(error){
         next(error)
     }
@@ -17,7 +17,7 @@ blog.get('/', async (req, res, next) => {
 
 blog.get('/:blog_id', async (req, res, next) => {
     const { blog_id } = req.params;
-    const blog = await BlogService.getABlog({blog_id });
+    const blog = await BlogService.getABlog(blog_id);
     res.json(blog);
 })
 

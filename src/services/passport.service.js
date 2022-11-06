@@ -12,13 +12,14 @@ passport.use('signin', new LocalStrategy({
     try{
         const user = await UserService.findUserByEmail(email);
         if(!user) return done(null, false);
-        const match = user.comparePassword(password);
+        const match = await user.comparePassword(password);
+        token = await user.generateToken();
         if(!match) return done(null, false);
-        return done(null, user)
+        return done(null, {user, token})
         
 
     }catch(error){
-        done(error)
+        return done(error)
     }
 }))
 
@@ -26,13 +27,17 @@ passport.use('signin', new LocalStrategy({
 
 passport.use(
   new JWTstrategy({
-      secretOrKey:'SweetGistSecretKey',
-      jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('jwt')
+      secretOrKey: 'TheSweetGistSECRETKEY',
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     },
      function (payload, done){
-        return User.findOneById(payload._id)
+      console.log(payload)
+        return UserService.findUserById(payload._id)
         .then(user => done(null, user))
-        .catch(err => done(err));
+        .catch(err => { 
+          console.log(err)
+          done(err)
+        });
     }
   )
 );

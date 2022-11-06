@@ -13,6 +13,7 @@ const BlogSchema = new mongoose.Schema(
     },
     tags: {
       type: [String],
+      default: []
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -47,7 +48,7 @@ const BlogSchema = new mongoose.Schema(
 BlogSchema.pre("save", async function (next) {
   try {
     const words = await this.body.split(' ').length;
-    const reading_time = Math.round(words/60);
+    const reading_time = await Math.round(words/200); // average reading words per minute
     this.reading_time = reading_time < 1 ? 0 : reading_time;  
     next();
   } catch (error) {

@@ -8,12 +8,14 @@ auth.post('/signin', async (req, res, next) => {
     try{
         passport.authenticate('signin', async (err, user, info) => {
               try {
-                if (err || !user) next(error)
+                if (err || !user) {
+                  const error = new Error('Invalid Email or Password');
+                  next(error)
+                }
                 req.login( user, { session: false },  async (error) => {
+               
                     if (error) return next(error);
-                    const payload = { _id: user._id, email: user.email };
-                    const token = jwt.sign({ user: payload }, process.env.SECRET_KEY);
-                    return res.setHeader('Authorization',`Bearer ${token}`).json({ user, token });
+                    return res.json({ ...user });
                   }
                 );
               } catch (error) {

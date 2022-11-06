@@ -37,6 +37,28 @@ user.get('/:user_id/blogs', async (req, res, next) => {
     }
 })
 
+user.post('/:user_id/blogs', async (req, res, next) => {
+    try{
+        const { user_id } = req.params;
+    
+        const { title, description, tags, body} = req.body;
+       const blogs = await BlogService.createBlog({ 
+        author: req.user._id,
+        title,
+        description,
+        tags,
+        body,
+        reading_time: 0
+        
+
+    });
+        res.json(blogs);
+
+    }catch(error){
+        next(error)
+    }
+})
+
 user.get('/:user_id/blogs/:blog_id', async (req, res, next) => {
     try{
         const { blog_id } = req.params;

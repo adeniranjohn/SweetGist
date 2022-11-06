@@ -3,8 +3,8 @@ const User = require('../models/user.model');
 
 class UserService {
 
-    async getUser(id){
-        const user = User.findOne({id});
+    async getUser(_id){
+        const user = User.findOne({_id});
         return user;
     }
 
@@ -13,8 +13,8 @@ class UserService {
         return user;
     }
     
-    async findUserById(id){
-        const user = await User.findOneById(id);
+    async findUserById(_id){
+        const user = await User.findById(_id);
         return user;
     }
 

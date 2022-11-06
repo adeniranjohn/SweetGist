@@ -4,8 +4,14 @@ const Blog = require('../models/blog.model');
 class BlogService {
 
     async getAllPublishedBlogs(page, limit){
-        const blogs = await Blog.find({state: 'published'}).limit(limit * 1).skip((page -1) * limit);
-        return ({success: true, pageblogs, page, total: blogs.length}); 
+        try{
+            const blogs = await Blog.find({state: 'published'}).limit(limit * 1).skip((page -1) * limit);
+            return ({success: true, page, total: blogs.length}); 
+        }catch(error){
+            next(error)
+        }
+
+
     }
 
     async getUserBlogs({user_id, state}){
@@ -21,7 +27,9 @@ class BlogService {
 
 
     async getABlog(blog_id){
-        const blog = await Blog.find({blog_id: blog_id});
+        const blog = await Blog.findOne({_id: blog_id});
+        blog.read_count = await blog.read_count + 1;
+        await blog.save();
         return blog;
     }
 

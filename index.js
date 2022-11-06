@@ -29,7 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.get('/', (req, res, next) => {
+app.get('/', passport.authenticate('jwt', { session: false }),async(req, res, next) => {
     try{
         res.send('This is the landing API');
     }catch(error){
@@ -39,7 +39,7 @@ app.get('/', (req, res, next) => {
 })
 
 app.use('/auth', authRouter);
-app.use('/users',passport.authenticate('jwt', { session: false }), userRouter);
+app.use('/users', passport.authenticate('jwt', { session: false }) , userRouter);
 app.use('/blogs', blogRouter);
 
 /**
@@ -47,8 +47,8 @@ app.use('/blogs', blogRouter);
  * This is to capture error from any of the route
  */
 app.use((error, req, res, next) => {
-
-    res.status(500).json({
+    console.log(error.status);
+    res.status(error.status || 500).json({
         error: error.message
     })
     next();
