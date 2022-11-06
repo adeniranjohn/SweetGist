@@ -9,7 +9,7 @@ const blogRouter = require('./src/routes/blog.route');
 const userRouter = require('./src/routes/user.route');
 const authRouter = require('./src/routes/auth.route');
 
-if(process.NODE_ENV !== 'production'){
+if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
 
