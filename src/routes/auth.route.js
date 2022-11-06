@@ -33,7 +33,7 @@ auth.post('/signup', async (req, res, next) => {
     try{
         console.log(req.body)
         const user = await UserService.createUser(req.body);
-        res.send(user)
+        res.json({user})
 
     }catch(error){
         next(error);

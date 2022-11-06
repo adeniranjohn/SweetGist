@@ -31,7 +31,6 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     },
      function (payload, done){
-      console.log(payload)
         return UserService.findUserById(payload._id)
         .then(user => done(null, user))
         .catch(err => { 

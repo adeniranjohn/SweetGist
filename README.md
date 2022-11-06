@@ -2,6 +2,7 @@
 A Blogging API for Second Semester Exam Project.
 
 ### Requirements
+```
 1. Users should have a first_name, last_name, email, password, (you can add other
 attributes you want to store about the user)
 2. A user should be able to sign up and sign in into the blog app
@@ -29,7 +30,7 @@ c. It should also be orderable by read_count, reading_time and timestamp
 author) with the blog. The read_count of the blog too should be updated by 1
 16. Come up with any algorithm for calculating the reading_time of the blog.
 17. Write tests for all endpoints
-
+```
 ###Technology 
 A NodeJS runtime environment
 NoSQL MongoDB database
@@ -40,42 +41,41 @@ npm install - This will install the necessary dependencies needed for the applic
 
 
 pull this repo
-update env with example.env
+create env with the follwing variables
+PORT - nodejs port
+SECRET_KEY - this is the secret key
+MONGO_URI - This is the mongodb url
 run npm run start:dev
-Base URL
-somehostsite.com
+
 Models
 User
-field	data_type	constraints
-id	string	required
-username	string	required
+email	string	required
 firstname	string	optional
 lastname	string	optional
-email	string	optional
 password	string	required
-user_type	string	required, default: user, enum: ['user', 'admin']
-Order
-field	data_type	constraints
-id	string	required
-created_at	date	required
-state	number	required,default:1
-total_price	number	required
-items	array	required
-item.name	string	required
-item.price	number	required
-item.size	string	required, enum: ['m', 's', 'l']
-item.quantity	number	required, enum: ['m', 's', 'l']
-APIs
+
+Blog
+
+state: string, enum:['draft','published'],default:draft
+author: id , reference User model
+title: String,
+body: String,
+description: String, 
+reading_time: number, 
+read_count: number - It increases by 1 as user reads.
+
 ### Signup User
 Route: /auth/signup
 Method: POST
 Body:
+```
 {
   "first_name": "John",
   "last_name": "Adeniran",
   "email": "jasolajohn@gmail.com",
   "password": "password"
  } 
+ ```
 Responses
 Success -  It returns the user detail
 
@@ -83,10 +83,12 @@ Login User
 Route: /auth/signin
 Method: POST
 Body:
+```
 {
   "email": "jasolajohn@gmail.com",
   "password": "password"
 }
+```
 Responses
 Success - it returns a token and the user
 
