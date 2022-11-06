@@ -13,7 +13,7 @@ auth.post('/signin', async (req, res, next) => {
                     if (error) return next(error);
                     const payload = { _id: user._id, email: user.email };
                     const token = jwt.sign({ user: payload }, process.env.SECRET_KEY);
-                    return res.json({ user, token });
+                    return res.setHeader('Authorization',`Bearer ${token}`).json({ user, token });
                   }
                 );
               } catch (error) {

@@ -35,7 +35,7 @@ app.get('/', (req, res, next) => {
 })
 
 app.use('/auth', authRouter)
-app.use('/users', userRouter);
+app.use('/users',passport.authenticate('jwt', { session: false }), userRouter);
 app.use('/blogs', blogRouter)
 
 /**

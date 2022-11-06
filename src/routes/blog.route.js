@@ -4,7 +4,9 @@ const BlogService = require('../services/blog.service');
 
 blog.get('/', async (req, res, next) => {
     try{ 
-        const blogs = await BlogService.getPublishedBlogs();
+        const page = parseInt( req.params.page || 0)
+        const limit = parseInt ( req.params.limit || 0)
+        const blogs = await BlogService.getPublishedBlogs(page, limit);
         res.json(blogs);
     }catch(error){
         next(error)

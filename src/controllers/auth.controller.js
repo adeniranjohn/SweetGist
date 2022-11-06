@@ -1,6 +1,6 @@
 export const authUser = async (req, res, next) => {
     try {
-        passport.authenticate('jwt', { session: false })
+    
       const token = req.headers.authorization.split(" ")[1];
       if(!token){
         res.json({message: "Not Authorized"});

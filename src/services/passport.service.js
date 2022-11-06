@@ -31,6 +31,7 @@ passport.use(
     },
     async (payload, done) => {
       try {
+        console.log(payload)
         const user = await UserServices.findById(payload._id);
         if(user){
              return done(null, user);

@@ -3,9 +3,9 @@ const Blog = require('../models/blog.model');
 
 class BlogService {
 
-    async getAllPublishedBlogs(){
-        const blogs = await Blog.find({state: 'published'});
-        return blogs; 
+    async getAllPublishedBlogs(page, limit){
+        const blogs = await Blog.find({state: 'published'}).limit(limit * 1).skip((page -1) * limit);
+        return ({success: true, pageblogs, page, total: blogs.length}); 
     }
 
     async getUserBlogs({user_id, state}){
